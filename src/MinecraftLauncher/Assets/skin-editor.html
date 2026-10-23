@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#1a1a1e; color:#ddd; font-family:"Microsoft YaHei",sans-serif; overflow:hidden; height:100vh; }
+#app { display:flex; height:100vh; }
+#left { flex:0 0 510px; padding:12px; }
+#canvasWrap { background:#333; width:480px; height:480px; }
+#skinCanvas { width:480px; height:480px; image-rendering:pixelated; cursor:crosshair; }
+#preview { flex:1; display:flex; align-items:center; justify-content:center; }
+#toolbar { flex:0 0 230px; padding:12px; background:#222226; }
+.row { margin-bottom:10px; }
+button { background:#3a3a42; color:#ddd; border:1px solid #555; padding:5px 10px; cursor:pointer; border-radius:4px; }
+button.active { background:#8b5cf6; border-color:#8b5cf6; color:#fff; }
+#colors { display:grid; grid-template-columns:repeat(8,1fr); gap:3px; }
+.swatch { width:100%; padding-bottom:100%; border:1px solid #555; cursor:pointer; }
+#hex { width:100%; padding:4px; background:#333; color:#ddd; border:1px solid #555; }
+#model3d { width:300px; height:340px; perspective:900px; position:relative; }
+#modelInner { width:100%; height:100%; transform-style:preserve-3d; transform:rotateY(-20deg) rotateX(5deg); position:relative; }
+.part { position:absolute; transform-style:preserve-3d; }
+.face { position:absolute; background-size:640px 640px; image-rendering:pixelated; }
+</style></head>
+<body>
+<div id="app">
+<div id="left"><div id="canvasWrap"><canvas id="skinCanvas" width="64" height="64"></canvas></div></div>
+<div id="preview"><div id="model3d"><div id="modelInner"></div></div></div>
+<div id="toolbar">
+<div class="row"><b>工具</b></div>
+<div class="row"><button id="penBtn" class="active" onclick="setTool('pen')">铅笔</button> <button id="eraseBtn" onclick="setTool('erase')">橡皮</button> <button id="pickerBtn" onclick="setTool('picker')">吸管</button></div>
+<div class="row"><button onclick="undo()">撤销</button> <button onclick="clearAll()">清空</button></div>
+<div class="row"><b>颜色</b></div>
+<div class="row" id="colors"></div>
+<div class="row"><input id="hex" value="#FFFFFF"></div>
+<div class="row"><button onclick="saveSkin()" style="background:#8b5cf6;border-color:#8b5cf6;color:#fff;width:100%;padding:8px;">保存皮肤</button></div>
+</div></div>
+<script>
+const canvas=document.getElementById('skinCanvas'),ctx=canvas.getContext('2d');
+ctx.fillStyle='#282828';ctx.fillRect(0,0,64,64);
+let tool='pen',color='#FFFFFF',drawing=false;const history=[];
+const palette=['#FFFFFF','#000000','#FF0000','#00FF00','#0000FF','#FFFF00','#FF00FF','#00FFFF','#FFA500','#800080','#008000','#008080','#000080','#808080','#C0C0C0','#F5DEB3','#FFC0CB','#A52A2A','#8B4513','#2F4F4F','#4B0082','#DDA0DD','#F0E68C','#98FB98','#E0FFFF','#FFE4E1','#B22222','#228B22','#1E90FF','#FFD700','#FF6347','#40E0D0'];
+const colorsEl=document.getElementById('colors');
+palette.forEach(c=>{const d=document.createElement('div');d.className='swatch';d.style.background=c;d.onclick=()=>{color=c;document.getElementById('hex').value=c;};colorsEl.appendChild(d);});
+function setTool(t){tool=t;['penBtn','eraseBtn','pickerBtn'].forEach(id=>document.getElementById(id).classList.remove('active'));document.getElementById(t==='pen'?'penBtn':t==='erase'?'eraseBtn':'pickerBtn').classList.add('active');}
+function pixelPos(e){const r=canvas.getBoundingClientRect();return {x:Math.floor((e.clientX-r.left)/r.width*64),y:Math.floor((e.clientY-r.top)/r.height*64)};}
+function paint(e){const p=pixelPos(e);if(p.x<0||p.y<0||p.x>=64||p.y>=64)return;
+if(tool==='picker'){const d=ctx.getImageData(p.x,p.y,1,1).data;color='#'+[d[0],d[1],d[2]].map(v=>v.toString(16).padStart(2,'0')).join('');document.getElementById('hex').value=color.toUpperCase();return;}
+if(tool==='erase'){ctx.clearRect(p.x,p.y,1,1);}else{ctx.fillStyle=document.getElementById('hex').value||color;ctx.fillRect(p.x,p.y,1,1);}updateModel();}
+canvas.addEventListener('mousedown',e=>{history.push(ctx.getImageData(0,0,64,64));drawing=true;paint(e);});
+canvas.addEventListener('mousemove',e=>{if(drawing)paint(e);});
+window.addEventListener('mouseup',()=>drawing=false);
+function undo(){if(!history.length)return;ctx.putImageData(history.pop(),0,0);updateModel();}
+function clearAll(){history.push(ctx.getImageData(0,0,64,64));ctx.clearRect(0,0,64,64);updateModel();}
+const modelInner=document.getElementById('modelInner');let skinUrl='';
+function updateModel(){skinUrl=canvas.toDataURL();renderModel();}
+function renderModel(){modelInner.innerHTML='';
+const parts=[{w:8,h:8,d:8,x:0,y:-22},{w:8,h:12,d:4,x:0,y:-4},{w:4,h:12,d:4,x:6,y:-4},{w:4,h:12,d:4,x:-6,y:-4},{w:4,h:12,d:4,x:2,y:14},{w:4,h:12,d:4,x:-2,y:14}];
+const PX=7;
+parts.forEach(p=>{const w=p.w*PX,h=p.h*PX,d=p.d*PX;
+const box=document.createElement('div');box.className='part';
+box.style.width=w+'px';box.style.height=h+'px';
+box.style.left=(150+p.x*PX-w/2)+'px';box.style.top=(170+p.y*PX-h/2)+'px';
+box.style.transformStyle='preserve-3d';
+const front=document.createElement('div');front.className='face';
+front.style.cssText=`width:${w}px;height:${h}px;background-image:url(${skinUrl});background-size:640px 640px;transform:translateZ(${d/2}px);`;
+box.appendChild(front);
+modelInner.appendChild(box);});}
+let rotX=5,rotY=-20,dragging=false,lastX=0,lastY=0;
+document.getElementById('model3d').addEventListener('mousedown',e=>{if(e.button===2){dragging=true;lastX=e.clientX;lastY=e.clientY;} });
+window.addEventListener('mousemove',e=>{if(!dragging)return;rotY+=(e.clientX-lastX)*0.5;rotX+=(e.clientY-lastY)*0.5;lastX=e.clientX;lastY=e.clientY;modelInner.style.transform=`rotateY(${rotY}deg) rotateX(${rotX}deg)`;});
+window.addEventListener('mouseup',()=>dragging=false);
+document.addEventListener('contextmenu',e=>e.preventDefault());
+function saveSkin(){const a=document.createElement('a');a.href=canvas.toDataURL('image/png');a.download='skin.png';a.click();}
+updateModel();
+</script>
+</body></html>

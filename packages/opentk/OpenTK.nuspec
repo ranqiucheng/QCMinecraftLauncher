@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>OpenTK</id>
+    <version>3.3.3</version>
+    <title>OpenTK</title>
+    <authors>The Open Toolkit Team</authors>
+    <owners>opentk thefiddler</owners>
+    <licenseUrl>http://github.com/opentk/opentk/blob/master/License.txt</licenseUrl>
+    <projectUrl>http://www.opentk.net</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/opentk/opentk.net/docfx/assets/opentk.png</iconUrl>
+    <description>The Open Toolkit is set of fast, low-level C# bindings for OpenGL, OpenGL ES and OpenAL. It runs on all major platforms and powers hundreds of apps, games and scientific research.
+OpenTK provides several utility libraries, including a math/linear algebra package, a windowing system, and input handling.</description>
+    <summary>A set of fast, low-level C# bindings for OpenGL, OpenGL ES and OpenAL.</summary>
+    <releaseNotes>	* OpenTK no longers alters the dll search path be default on windows platforms. Separate folders for `x86` and `x64` dlls can now be optionally turned on by using `ToolkitOptions.SetWindowsDLLPathAnyCPU = true`, see documentation comment for more details. (@NogginBops)
+	* New feature that allows you to use virtual keys on windows. This can be toggled on using `GameWindowFlags.UseVirtualKeys`. See https://github.com/opentk/opentk/pull/1360 for more details. (@tyronx)
+	* Deprecated `Vector3 Transform(Matrix3 mat, Vector3 vec)` (right multiplication) because of a bug meant this function was doing a left multiplication. Instead two new functions `TransformRow` and `TransformColumn` that handle the left and right multiplication correctly. (@NogginBops)
+	* A lot of enum entries where added to enums where they where missing. For example `SizedInternalFormat` now contains all allowed formats and `GetTextureParameter` now contains `TextureMaxAnisotropy`. (@NogginBops)</releaseNotes>
+    <copyright>Copyright (c) 2006 - 2019 Stefanos Apostolopoulos &lt;stapostol@gmail.com&gt; for the Open Toolkit library.</copyright>
+    <tags>OpenTK OpenGL OpenAL OpenCL C# F# VB .Net Mono Graphics Game Scientific Science 3D 2D Math Input Gamepad Joystick</tags>
+  </metadata>
+</package>

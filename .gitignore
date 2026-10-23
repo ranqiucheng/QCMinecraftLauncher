@@ -1,0 +1,24 @@
+# 编译产物
+bin/
+obj/
+*.user
+*.suo
+.vs/
+
+# 依赖包（体积大，用 packages.config 或 README 说明获取方式）
+packages/webview2/
+packages/opentk/
+packages/glcontrol/
+
+# 封装版输出
+release/
+
+# 临时文件
+*.tmp
+*.log
+launch-cmd.txt
+launcher.json
+
+# 系统
+Thumbs.db
+.DS_Store

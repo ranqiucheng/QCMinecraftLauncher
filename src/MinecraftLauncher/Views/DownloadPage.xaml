@@ -1,0 +1,385 @@
+﻿<UserControl x:Class="MinecraftLauncher.Views.DownloadPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<UserControl.Resources>
+    <Style x:Key="GraphicalTabItem" TargetType="TabItem">
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabItem">
+                    <Border x:Name="Bd" CornerRadius="10" Margin="0,0,10,0" Padding="18,10"
+                            Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource DividerBrush}" BorderThickness="1">
+                        <ContentPresenter ContentSource="Header" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource PrimaryLightBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource PrimaryBrush}"/>
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource PrimaryBrush}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</UserControl.Resources>
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="下载" Style="{StaticResource PageTitleStyle}"/>
+
+        <TabControl Grid.Row="1" x:Name="DownloadTabs" Background="Transparent" BorderThickness="0" ItemContainerStyle="{StaticResource GraphicalTabItem}"
+                    SelectionChanged="DownloadTabs_SelectionChanged">
+            <TabItem><TabItem.Header><StackPanel Orientation="Horizontal"><TextBlock Text="&#xE7FC;" FontFamily="Segoe MDL2 Assets" FontSize="18" Margin="0,0,8,0"/><TextBlock Text="原版游戏" FontSize="14" FontWeight="Bold"/></StackPanel></TabItem.Header>
+                <Grid Margin="0,12,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Style="{StaticResource CardStyle}" Margin="0,0,0,14">
+                        <StackPanel>
+                            <TextBlock Text="最新版本" FontWeight="Bold" FontSize="15" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,12"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Button x:Name="LatestReleaseBtn" Width="300" Height="82" HorizontalContentAlignment="Left" Padding="16"
+                                        Background="{DynamicResource CardBackgroundBrush}" BorderThickness="1" BorderBrush="{DynamicResource DividerBrush}"
+                                        Cursor="Hand" Click="LatestRelease_Click">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="8"
+                                                    BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource PrimaryLightBrush}"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <StackPanel>
+                                        <TextBlock x:Name="LatestReleaseText" Text="加载中..." FontSize="19" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                        <TextBlock Text="最新正式版" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,6,0,0"/>
+                                    </StackPanel>
+                                </Button>
+                                <Button x:Name="LatestSnapshotBtn" Width="300" Height="82" Margin="14,0,0,0" HorizontalContentAlignment="Left" Padding="16"
+                                        Background="{DynamicResource CardBackgroundBrush}" BorderThickness="1" BorderBrush="{DynamicResource DividerBrush}"
+                                        Cursor="Hand" Click="LatestSnapshot_Click">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="8"
+                                                    BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource PrimaryLightBrush}"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <StackPanel>
+                                        <TextBlock x:Name="LatestSnapshotText" Text="加载中..." FontSize="19" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                        <TextBlock Text="最新预览版" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,6,0,0"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl x:Name="GroupsControl">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Expander Header="{Binding Title}" Margin="0,0,0,10" FontSize="14" FontWeight="Bold"
+                                              Foreground="{DynamicResource TextPrimaryBrush}">
+                                        <Expander.Template>
+                                            <ControlTemplate TargetType="Expander">
+                                                <Border Style="{StaticResource CardStyle}" Margin="0,0,0,10" Padding="8,14">
+                                                    <StackPanel>
+                                                        <ToggleButton x:Name="HeaderBtn" Content="{TemplateBinding Header}" Cursor="Hand"
+                                                                      IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                                                      HorizontalContentAlignment="Left" FontWeight="Bold" FontSize="14"
+                                                                      Foreground="{DynamicResource TextPrimaryBrush}" Background="Transparent"
+                                                                      BorderThickness="0" Padding="8">
+                                                            <ToggleButton.Template>
+                                                                <ControlTemplate TargetType="ToggleButton">
+                                                                    <Border Background="Transparent" Padding="{TemplateBinding Padding}">
+                                                                        <ContentPresenter/>
+                                                                    </Border>
+                                                                </ControlTemplate>
+                                                            </ToggleButton.Template>
+                                                        </ToggleButton>
+                                                        <ContentPresenter x:Name="Content" Visibility="Collapsed"/>
+                                                    </StackPanel>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsExpanded" Value="True">
+                                                        <Setter TargetName="Content" Property="Visibility" Value="Visible"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Expander.Template>
+                                        <ListBox ItemsSource="{Binding Versions}" MaxHeight="320"
+                                                 BorderThickness="0" Background="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Button Tag="{Binding}" Click="InstallVersion_Click"
+                                                            HorizontalContentAlignment="Stretch" Background="Transparent"
+                                                            BorderThickness="0" Padding="8,6" Cursor="Hand">
+                                                        <Button.Template>
+                                                            <ControlTemplate TargetType="Button">
+                                                                <Border x:Name="Bd" Background="Transparent" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                                                                    <ContentPresenter/>
+                                                                </Border>
+                                                                <ControlTemplate.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter TargetName="Bd" Property="Background" Value="{DynamicResource HoverBackgroundBrush}"/>
+                                                                    </Trigger>
+                                                                </ControlTemplate.Triggers>
+                                                            </ControlTemplate>
+                                                        </Button.Template>
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <Grid Width="26" Height="26" Margin="0,0,10,0" VerticalAlignment="Center">
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition Height="9"/>
+                                                                    <RowDefinition Height="*"/>
+                                                                </Grid.RowDefinitions>
+                                                                <Rectangle Grid.Row="0" Fill="#7CB442" RadiusX="4" RadiusY="4"/>
+                                                                <Rectangle Grid.Row="1" Fill="#8B5A2B" RadiusX="4" RadiusY="4" Margin="0,1,0,0"/>
+                                                            </Grid>
+                                                            <StackPanel Grid.Column="1">
+                                                                <TextBlock Text="{Binding Id}" FontWeight="Bold" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                                                <TextBlock Text="{Binding ReleaseTime}" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,2,0,0"/>
+                                                            </StackPanel>
+                                                            <TextBlock Grid.Column="2" Text="{Binding Status}" VerticalAlignment="Center"
+                                                                       Foreground="{DynamicResource PrimaryBrush}" FontWeight="Bold" Margin="12,0,0,0"/>
+                                                        </Grid>
+                                                    </Button>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </Expander>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                    <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,10,0,0">
+                        <TextBlock x:Name="StatusText" Text="正在加载版本清单..." FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                        <Button Content="重新加载" Width="90" Height="30" Margin="16,0,0,0" Style="{StaticResource SecondaryButtonStyle}" Click="Reload_Click"/>
+                        <ProgressBar x:Name="ProgressBar" Width="220" Height="14" Margin="16,0,0,0" Minimum="0" Maximum="100"
+                                     Foreground="{DynamicResource PrimaryBrush}"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+                        <TabItem><TabItem.Header><StackPanel Orientation="Horizontal"><TextBlock Text="&#xE8B7;" FontFamily="Segoe MDL2 Assets" FontSize="18" Margin="0,0,8,0"/><TextBlock Text="整合包" FontSize="14" FontWeight="Bold"/></StackPanel></TabItem.Header>
+                <Grid Margin="0,12,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" Style="{StaticResource CardStyle}" Margin="0,0,0,12">
+                        <StackPanel>
+                            <TextBlock Text="搜索整合包" FontWeight="Bold" FontSize="15" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,12"/>
+                            <DockPanel>
+                                <Button Content="搜索" DockPanel.Dock="Right" Width="90" Height="36" Style="{StaticResource PrimaryButtonStyle}" Margin="10,0,0,0" Click="SearchPack_Click"/>
+                                <TextBox x:Name="PackSearchBox" Height="36" VerticalContentAlignment="Center" Padding="10,0"/>
+                            </DockPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                <TextBlock Text="版本" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,8,0"/>
+                                <ComboBox x:Name="PackVersionCombo" Width="120" Height="32" SelectedIndex="0">
+                                    <ComboBoxItem Content="全部"/>
+                                    <ComboBoxItem Content="1.21.1"/>
+                                    <ComboBoxItem Content="1.20.1"/>
+                                    <ComboBoxItem Content="1.19.2"/>
+                                    <ComboBoxItem Content="1.18.2"/>
+                                    <ComboBoxItem Content="1.16.5"/>
+                                </ComboBox>
+                                <TextBlock Text="类型" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" Margin="18,0,8,0"/>
+                                <ComboBox x:Name="PackTypeCombo" Width="130" Height="32" SelectedIndex="0">
+                                    <ComboBoxItem Content="全部"/>
+                                    <ComboBoxItem Content="adventure"/>
+                                    <ComboBoxItem Content="technology"/>
+                                    <ComboBoxItem Content="magic"/>
+                                    <ComboBoxItem Content="optimization"/>
+                                </ComboBox>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl x:Name="PackResults">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Style="{StaticResource ClickableCardStyle}" Margin="0,0,0,10">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Border Width="56" Height="56" CornerRadius="8" Background="{DynamicResource HoverBackgroundBrush}" Margin="0,0,14,0" ClipToBounds="True">
+                                                <Image Source="{Binding IconImage}" Stretch="UniformToFill"/>
+                                            </Border>
+                                            <StackPanel Grid.Column="1">
+                                                <TextBlock Text="{Binding title}" FontWeight="Bold" FontSize="16" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                                <TextBlock Text="{Binding Tags}" FontSize="11" Foreground="{DynamicResource PrimaryBrush}" Margin="0,4,0,0"/>
+                                                <TextBlock Text="{Binding description}" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap" Margin="0,4,0,0" MaxHeight="36"/>
+                                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                                    <TextBlock Text="{Binding Loaders}" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,14,0"/>
+                                                    <TextBlock Text="{Binding DownloadsText}" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,14,0"/>
+                                                    <TextBlock Text="{Binding TimeText}" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <Button Grid.Column="2" Content="下载安装" Width="100" Height="38" Style="{StaticResource PrimaryButtonStyle}"
+                                                    VerticalAlignment="Center" Margin="12,0,0,0" Tag="{Binding}" Click="InstallPack_Click"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                    <TextBlock Grid.Row="2" x:Name="PackStatusText" Text="输入关键词搜索整合包" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,8,0,0"/>
+                </Grid>
+            </TabItem>
+
+                        <TabItem><TabItem.Header><StackPanel Orientation="Horizontal"><TextBlock Text="&#xE713;" FontFamily="Segoe MDL2 Assets" FontSize="18" Margin="0,0,8,0"/><TextBlock Text="Mod" FontSize="14" FontWeight="Bold"/></StackPanel></TabItem.Header>
+                <Grid Margin="0,12,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" Style="{StaticResource CardStyle}" Margin="0,0,0,12">
+                        <StackPanel>
+                            <DockPanel>
+                                <Button Content="搜索" DockPanel.Dock="Right" Width="90" Height="36" Style="{StaticResource PrimaryButtonStyle}" Margin="10,0,0,0" Click="SearchMod_Click"/>
+                                <TextBox x:Name="ModSearchBox" Height="36" VerticalContentAlignment="Center" Padding="10,0"/>
+                            </DockPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                <TextBlock Text="版本" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,8,0"/>
+                                <ComboBox x:Name="ModVersionCombo" Width="120" Height="32" SelectedIndex="0">
+                                    <ComboBoxItem Content="全部"/><ComboBoxItem Content="1.21.1"/><ComboBoxItem Content="1.20.1"/><ComboBoxItem Content="1.19.2"/><ComboBoxItem Content="1.18.2"/><ComboBoxItem Content="1.16.5"/>
+                                </ComboBox>
+                                <TextBlock Text="类型" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" Margin="18,0,8,0"/>
+                                <ComboBox x:Name="ModTypeCombo" Width="130" Height="32" SelectedIndex="0">
+                                    <ComboBoxItem Content="全部"/><ComboBoxItem Content="technology"/><ComboBoxItem Content="adventure"/><ComboBoxItem Content="magic"/><ComboBoxItem Content="utility"/>
+                                </ComboBox>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl x:Name="ModResults">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Style="{StaticResource ClickableCardStyle}" Margin="0,0,0,10">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Border Width="56" Height="56" CornerRadius="8" Background="{DynamicResource HoverBackgroundBrush}" Margin="0,0,14,0" ClipToBounds="True">
+                                                <Image Source="{Binding IconImage}" Stretch="UniformToFill"/>
+                                            </Border>
+                                            <StackPanel Grid.Column="1">
+                                                <TextBlock Text="{Binding title}" FontWeight="Bold" FontSize="16" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                                <TextBlock Text="{Binding Tags}" FontSize="11" Foreground="{DynamicResource PrimaryBrush}" Margin="0,4,0,0"/>
+                                                <TextBlock Text="{Binding description}" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap" Margin="0,4,0,0" MaxHeight="36"/>
+                                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                                    <TextBlock Text="{Binding Loaders}" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,14,0"/>
+                                                    <TextBlock Text="{Binding DownloadsText}" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,14,0"/>
+                                                    <TextBlock Text="{Binding TimeText}" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <Button Grid.Column="2" Content="下载" Width="85" Height="38" Style="{StaticResource PrimaryButtonStyle}"
+                                                    VerticalAlignment="Center" Margin="12,0,0,0" Tag="{Binding}" Click="DownloadMod_Click"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                    <TextBlock Grid.Row="2" x:Name="ModStatusText" Text="输入关键词搜索" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,8,0,0"/>
+                </Grid>
+            </TabItem>
+
+                        <TabItem><TabItem.Header><StackPanel Orientation="Horizontal"><TextBlock Text="&#xE706;" FontFamily="Segoe MDL2 Assets" FontSize="18" Margin="0,0,8,0"/><TextBlock Text="光影" FontSize="14" FontWeight="Bold"/></StackPanel></TabItem.Header>
+                <Grid Margin="0,12,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" Style="{StaticResource CardStyle}" Margin="0,0,0,12">
+                        <StackPanel>
+                            <DockPanel>
+                                <Button Content="搜索" DockPanel.Dock="Right" Width="90" Height="36" Style="{StaticResource PrimaryButtonStyle}" Margin="10,0,0,0" Click="SearchShader_Click"/>
+                                <TextBox x:Name="ShaderSearchBox" Height="36" VerticalContentAlignment="Center" Padding="10,0"/>
+                            </DockPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                <TextBlock Text="版本" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,8,0"/>
+                                <ComboBox x:Name="ShaderVersionCombo" Width="120" Height="32" SelectedIndex="0">
+                                    <ComboBoxItem Content="全部"/><ComboBoxItem Content="1.21.1"/><ComboBoxItem Content="1.20.1"/><ComboBoxItem Content="1.19.2"/><ComboBoxItem Content="1.18.2"/><ComboBoxItem Content="1.16.5"/>
+                                </ComboBox>
+                                <TextBlock Text="类型" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" Margin="18,0,8,0"/>
+                                <ComboBox x:Name="ShaderTypeCombo" Width="130" Height="32" SelectedIndex="0">
+                                    <ComboBoxItem Content="全部"/><ComboBoxItem Content="realistic"/><ComboBoxItem Content="cartoon"/><ComboBoxItem Content="fantasy"/>
+                                </ComboBox>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl x:Name="ShaderResults">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Style="{StaticResource ClickableCardStyle}" Margin="0,0,0,10">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Border Width="56" Height="56" CornerRadius="8" Background="{DynamicResource HoverBackgroundBrush}" Margin="0,0,14,0" ClipToBounds="True">
+                                                <Image Source="{Binding IconImage}" Stretch="UniformToFill"/>
+                                            </Border>
+                                            <StackPanel Grid.Column="1">
+                                                <TextBlock Text="{Binding title}" FontWeight="Bold" FontSize="16" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                                <TextBlock Text="{Binding Tags}" FontSize="11" Foreground="{DynamicResource PrimaryBrush}" Margin="0,4,0,0"/>
+                                                <TextBlock Text="{Binding description}" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap" Margin="0,4,0,0" MaxHeight="36"/>
+                                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                                    <TextBlock Text="{Binding Loaders}" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,14,0"/>
+                                                    <TextBlock Text="{Binding DownloadsText}" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,14,0"/>
+                                                    <TextBlock Text="{Binding TimeText}" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <Button Grid.Column="2" Content="下载" Width="85" Height="38" Style="{StaticResource PrimaryButtonStyle}"
+                                                    VerticalAlignment="Center" Margin="12,0,0,0" Tag="{Binding}" Click="DownloadShader_Click"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                    <TextBlock Grid.Row="2" x:Name="ShaderStatusText" Text="输入关键词搜索" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,8,0,0"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

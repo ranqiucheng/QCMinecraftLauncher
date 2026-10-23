@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="MinecraftLauncher.Views.ModPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <StackPanel Margin="20" MaxWidth="720" HorizontalAlignment="Left">
+        <TextBlock Text="Mod 管理" Style="{StaticResource PageTitleStyle}"/>
+        <TextBlock Text="先选择一个已安装的版本，再打开该版本独立的 mods / 资源包 / 存档等目录（版本隔离）。"
+                   Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13" Margin="0,0,0,20"/>
+
+        <Border Style="{StaticResource CardStyle}">
+            <StackPanel>
+                <TextBlock Text="选择版本" FontWeight="Bold" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,10"/>
+                <DockPanel>
+                    <Button Content="刷新" DockPanel.Dock="Right" Width="76" Height="34"
+                            Style="{StaticResource SecondaryButtonStyle}" Margin="8,0,0,0" Click="Refresh_Click"/>
+                    <ComboBox x:Name="VersionCombo" Height="34" VerticalContentAlignment="Center"
+                              SelectionChanged="VersionCombo_SelectionChanged"/>
+                </DockPanel>
+            </StackPanel>
+        </Border>
+
+        <TextBlock x:Name="TipText" Text="请先在「启动」页安装一个版本" Foreground="{DynamicResource TextSecondaryBrush}"
+                   FontSize="12" Margin="0,0,0,14" TextWrapping="Wrap"/>
+
+        <Border Style="{StaticResource CardStyle}">
+            <StackPanel>
+                <TextBlock Text="打开目录" FontWeight="Bold" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,12"/>
+                <WrapPanel x:Name="ButtonsPanel" IsEnabled="False">
+                    <Button Content="mods 目录" Tag="mods" Click="OpenDir_Click" Width="150" Height="40" Margin="0,0,12,12" Style="{StaticResource SecondaryButtonStyle}"/>
+                    <Button Content="资源包" Tag="resourcepacks" Click="OpenDir_Click" Width="150" Height="40" Margin="0,0,12,12" Style="{StaticResource SecondaryButtonStyle}"/>
+                    <Button Content="光影包" Tag="shaderpacks" Click="OpenDir_Click" Width="150" Height="40" Margin="0,0,12,12" Style="{StaticResource SecondaryButtonStyle}"/>
+                    <Button Content="存档" Tag="saves" Click="OpenDir_Click" Width="150" Height="40" Margin="0,0,12,12" Style="{StaticResource SecondaryButtonStyle}"/>
+                    <Button Content="截图" Tag="screenshots" Click="OpenDir_Click" Width="150" Height="40" Margin="0,0,12,12" Style="{StaticResource SecondaryButtonStyle}"/>
+                    <Button Content="版本文件目录" Tag="versions" Click="OpenDir_Click" Width="150" Height="40" Margin="0,0,12,12" Style="{StaticResource SecondaryButtonStyle}"/>
+                    <Button Content="游戏根目录" Tag="root" Click="OpenDir_Click" Width="150" Height="40" Margin="0,0,12,12" Style="{StaticResource SecondaryButtonStyle}"/>
+                </WrapPanel>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

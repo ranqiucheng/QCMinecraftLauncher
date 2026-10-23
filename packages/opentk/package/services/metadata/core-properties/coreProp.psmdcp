@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<coreProperties xmlns="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <dc:creator>The Open Toolkit Team</dc:creator>
+  <dc:description>The Open Toolkit is set of fast, low-level C# bindings for OpenGL, OpenGL ES and OpenAL. It runs on all major platforms and powers hundreds of apps, games and scientific research.
+OpenTK provides several utility libraries, including a math/linear algebra package, a windowing system, and input handling.</dc:description>
+  <dc:identifier>OpenTK</dc:identifier>
+  <version>3.3.3</version>
+  <keywords />
+  <dc:title>OpenTK</dc:title>
+  <lastModifiedBy>paket</lastModifiedBy>
+</coreProperties>

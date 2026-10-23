@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="MinecraftLauncher.Views.SkinEditorPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:wfi="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource DividerBrush}" BorderThickness="0,0,0,1">
+            <DockPanel Margin="12,0">
+                <TextBlock Text="皮肤工作室（OpenGL 原生渲染）" FontWeight="Bold" FontSize="15" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                <Button DockPanel.Dock="Right" Content="保存皮肤" Width="100" Height="28" Style="{StaticResource PrimaryButtonStyle}" Click="Save_Click" VerticalAlignment="Center"/>
+                <TextBlock x:Name="StatusText" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Text="左键绘制 · 右键拖动旋转"/>
+            </DockPanel>
+        </Border>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="240"/>
+            </Grid.ColumnDefinitions>
+            <wfi:WindowsFormsHost Grid.Column="0" x:Name="GlHost" Margin="8" />
+            <Border Grid.Column="1" Background="{DynamicResource CardBackgroundBrush}" Margin="0,8,8,8">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="10">
+                        <TextBlock Text="工具" FontWeight="Bold" FontSize="12" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,6"/>
+                        <WrapPanel>
+                            <RadioButton x:Name="PenRadio" Content="铅笔" IsChecked="True" GroupName="T" Style="{StaticResource ToolRadioStyle}" Width="60"/>
+                            <RadioButton x:Name="EraserRadio" Content="橡皮" GroupName="T" Style="{StaticResource ToolRadioStyle}" Width="60"/>
+                            <RadioButton x:Name="PickerRadio" Content="吸管" GroupName="T" Style="{StaticResource ToolRadioStyle}" Width="60"/>
+                        </WrapPanel>
+                        <Button Content="撤销" Height="26" Margin="0,8,0,4" Style="{StaticResource SecondaryButtonStyle}" Click="Undo_Click" FontSize="11"/>
+                        <Button Content="清空" Height="26" Style="{StaticResource SecondaryButtonStyle}" Click="Clear_Click" FontSize="11"/>
+                        <TextBlock Text="显示部位" FontWeight="Bold" FontSize="12" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,12,0,6"/>
+                        <WrapPanel>
+                            <CheckBox x:Name="HeadCheck" Content="头" IsChecked="True" Margin="0,0,10,6" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Checked="Part_Changed" Unchecked="Part_Changed"/>
+                            <CheckBox x:Name="BodyCheck" Content="身体" IsChecked="True" Margin="0,0,10,6" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Checked="Part_Changed" Unchecked="Part_Changed"/>
+                            <CheckBox x:Name="RArmCheck" Content="右臂" IsChecked="True" Margin="0,0,10,6" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Checked="Part_Changed" Unchecked="Part_Changed"/>
+                            <CheckBox x:Name="LArmCheck" Content="左臂" IsChecked="True" Margin="0,0,10,6" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Checked="Part_Changed" Unchecked="Part_Changed"/>
+                            <CheckBox x:Name="RLegCheck" Content="右腿" IsChecked="True" Margin="0,0,10,6" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Checked="Part_Changed" Unchecked="Part_Changed"/>
+                            <CheckBox x:Name="LLegCheck" Content="左腿" IsChecked="True" Margin="0,0,10,6" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Checked="Part_Changed" Unchecked="Part_Changed"/>
+                        </WrapPanel>
+                        <TextBlock Text="颜色" FontWeight="Bold" FontSize="12" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,12,0,6"/>
+                        <UniformGrid x:Name="ColorGrid" Columns="6" Height="72"/>
+                        <TextBox x:Name="ColorHexBox" Height="24" Margin="0,6,0,0" VerticalContentAlignment="Center" Padding="6,0" Text="#FFFFFF" FontSize="11"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>
